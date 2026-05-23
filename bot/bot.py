@@ -1,4 +1,5 @@
 import argparse
+from services.llm_router import route_with_llm
 from handlers.basic import (
     handle_start,
     handle_help,
@@ -20,7 +21,11 @@ def route_message(text: str) -> str:
         return handle_labs()
     if text.startswith("/scores"):
         return handle_scores(text)
-
+    if not text.startswith("/"):
+        try:
+            return route_with_llm(text)
+        except Exception as error:
+            return f"I can help with labs, scores, pass rates, groups, and learners. LLM error: {error}"
     return "Unknown command. Use /help to see available commands."
 
 def main() -> None:
