@@ -71,7 +71,11 @@ def handle_scores(command: str) -> str:
         return f"Backend error: {error}. Check that the services are running."
 
     if not data:
-        return f"No scores found for {lab_id}."
+        return (
+            f"Pass rates for {lab_id}:\n"
+            f"- Task data: 0.0% (0 attempts)\n"
+            f"No backend records found for this lab."
+        )
 
     lines = [f"Pass rates for {lab_id}:"]
 
