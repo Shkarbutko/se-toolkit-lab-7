@@ -35,3 +35,16 @@ class BackendClient:
             raise RuntimeError(f"HTTP {status}: {text[:200]}") from error
         except requests.exceptions.RequestException as error:
             raise RuntimeError(str(error)) from error
+    
+    def post(self, path: str, json_body: dict[str, Any] | None = None) -> Any:
+        try:
+            response = requests.post(
+                f"{self.base_url}{path}",
+                headers=self._headers(),
+                json=json_body or {},
+                timeout=30,
+            )
+            response.raise_for_status()
+            return response.json()
+        except requests.exceptions.RequestException as error:
+            raise RuntimeError(str(error)) from error
